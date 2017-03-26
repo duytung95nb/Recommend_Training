@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry exported="true" kind="lib" path="libs/opencsv-3.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-catalyst_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-core_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-graphx_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-hive_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-hive-thriftserver_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-launcher_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-mesos_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-mllib_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-mllib-local_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-network-common_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-network-shuffle_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-repl_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-sketch_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-sql_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-streaming_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-tags_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-unsafe_2.11-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/spark-yarn_2.11-2.1.0.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
