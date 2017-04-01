@@ -70,23 +70,30 @@ public class User {
 		this.setListenedSongs(songsScore);
 	}
 
-	public long calculateSimilarity(User other) {
+	public double calculateSimilarity(User other) {
 		// same function as multiply matrix
 		long score = 0;
 		Map<String, Integer> otherUserMap = other.getListenedSongs();
 		for (String songId : this.listenedSongs.keySet()) {
+			int difference = 0;
 			if (otherUserMap.containsKey(songId)) {
-				score += (this.listenedSongs.get(songId) * otherUserMap.get(songId));
+				difference = this.listenedSongs.get(songId) - otherUserMap.get(songId);
 			}
+			// if other map doesnt contains that song
+			else{
+				difference = this.listenedSongs.get(songId);
+			}
+			score += (difference*difference);
 		}
-		return score;
+		double percentage = 1.0/(1+score);
+		return percentage;
 	}
 
-	public Map<String, Long> listUsersWithSimilarityScore(List<User> users) {
-		Map<String, Long> list = new HashMap<>();
+	public Map<String, Double> listUsersWithSimilarityScore(List<User> users) {
+		Map<String, Double> list = new HashMap<>();
 		for (User user : users) {
 			if (this.getUserID() != user.getUserID()) {
-				long userScore = this.calculateSimilarity(user);
+				double userScore = this.calculateSimilarity(user);
 				list.put(user.getUserID(), userScore);
 			}
 		}

@@ -87,7 +87,7 @@ public class Action {
 		numberOfRecommendations = s.nextInt();
 			chosenUser = User.getUserById(userId,this.getUserEvents());
 			// sort
-			Map<String,Long> listWithScore = chosenUser.listUsersWithSimilarityScore(this.getUsers());
+			Map<String,Double> listWithScore = chosenUser.listUsersWithSimilarityScore(this.getUsers());
 			listWithScore = this.sortDescByValues(listWithScore);
 		System.out.println(listWithScore.toString());
 		List<User> sortedUsersByScore = User.getUserListFromUserIds(listWithScore.keySet(), this.getUserEvents());
@@ -106,23 +106,23 @@ public class Action {
 		for (Song song : recommendSongs) {
 			System.out.print(song.getSongString()+"|\t");
 		}
-		
+		s.close();
 	}
 	
-	public Map<String, Long> sortDescByValues(Map<String, Long> input) {
+	public Map<String, Double> sortDescByValues(Map<String, Double> input) {
 		// sort by values
-		List<Map.Entry<String, Long>> inputList = new LinkedList<>(input.entrySet());
-		Collections.sort(inputList, new Comparator<Map.Entry<String, Long>>() {
+		List<Map.Entry<String, Double>> inputList = new LinkedList<>(input.entrySet());
+		Collections.sort(inputList, new Comparator<Map.Entry<String, Double>>() {
 
 			@Override
-			public int compare(Entry<String, Long> arg0, Entry<String, Long> arg1) {
+			public int compare(Entry<String, Double> arg0, Entry<String, Double> arg1) {
 				// TODO Auto-generated method stub
 				return arg1.getValue().compareTo(arg0.getValue());
 			}
 
 		});
-		Map<String, Long> sortedByValue = new LinkedHashMap<String, Long>();
-		for (Entry<String, Long> entry : inputList) {
+		Map<String, Double> sortedByValue = new LinkedHashMap<String, Double>();
+		for (Entry<String, Double> entry : inputList) {
 			sortedByValue.put(entry.getKey(), entry.getValue());
 		}
 		return sortedByValue;
