@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import Objects.Song;
@@ -75,17 +76,39 @@ public class Action {
 		System.out.println("Finished writing user events to UserEvent.csv");
 	}
 
-	public User getUserById(String id) {
-		List<User> users = User.getUserListWithListenedSongs(this.userEvents);
-		for (User user : users) {
-			System.out.println(user.getUserID());
-			if (user.getUserID().equals(id)) {
-				return user;
-			}
+	public void recommend(){
+		Scanner s = new Scanner(System.in);
+		String userId;
+		int numberOfRecommendations;
+		User chosenUser = null;
+		System.out.println("Nhap vao user id:");
+		userId = s.next();
+		System.out.println("Nhap vao so bai hat can goi y:");
+		numberOfRecommendations = s.nextInt();
+			chosenUser = User.getUserById(userId,this.getUserEvents());
+			// sort
+			Map<String,Long> listWithScore = chosenUser.listUsersWithSimilarityScore(this.getUsers());
+			listWithScore = this.sortDescByValues(listWithScore);
+		System.out.println(listWithScore.toString());
+		List<User> sortedUsersByScore = User.getUserListFromUserIds(listWithScore.keySet(), this.getUserEvents());
+		
+		Set<String> recommendSongIds = chosenUser.getRecommendedSongIds(numberOfRecommendations, sortedUsersByScore);
+		List<Song> recommendSongs = Song.getSongsFromSetOfIds(recommendSongIds, Song.getAllSongsInList());
+		System.out.println(recommendSongIds);
+		
+		System.out.println("Do ban da nghe:");
+		List<Song> listenedSongs = Song.getSongsFromSetOfIds(chosenUser.getListenedSongs().keySet(), Song.getAllSongsInList());
+		for (Song song : listenedSongs) {
+			System.out.print(song.getSongString()+"|\t");
 		}
-		return null;
+		System.out.println();
+		System.out.println("Recommend cho ban:");
+		for (Song song : recommendSongs) {
+			System.out.print(song.getSongString()+"|\t");
+		}
+		
 	}
-
+	
 	public Map<String, Long> sortDescByValues(Map<String, Long> input) {
 		// sort by values
 		List<Map.Entry<String, Long>> inputList = new LinkedList<>(input.entrySet());

@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,8 +27,11 @@ public class Main {
 		Song.setAllSongsInList(songs);
 		Scanner s = new Scanner(System.in);
 		int choice = 0;
-		System.out.println("Nhap vao lua chon \n" + "1- Tao user event\n" + "2 - Tao bang user\n");
+		System.out.println("Nhap vao lua chon \n" + "1- Tao user event\n" 
+						    + "2 - Tao bang user\n"
+		                    + "3 - Recommend bang user id\n");
 		choice = s.nextInt();
+		
 		Action action = new Action();
 		List<UserEvent> userEvents = new ArrayList<>();
 		userEvents = UserEvent.getUserEventsFromFile("UserEvent.csv");
@@ -41,16 +45,14 @@ public class Main {
 			break;
 
 		case 2:
-			String userId;
-			User chosenUser = null;
-			System.out.println("Nhap vao user id:");
-			userId = s.next();
+			long startTime = new Date().getTime();
+			action.recommend();
+			long endTime = new Date().getTime();
+			System.out.println();
+			System.out.println("Thoi gian thuc thi goi y (second):"+((endTime-startTime)/1000));
 			
- 			chosenUser = action.getUserById(userId);
- 			// sort
- 			Map<String,Long> listWithScore = chosenUser.listUsersWithSimilarityScore(action.getUsers());
- 			listWithScore = action.sortDescByValues(listWithScore);
-			System.out.println(listWithScore.toString());
+			break;
+		case 3:
 			break;
 		default:
 			System.out.println("Nhap sai!");

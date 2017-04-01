@@ -21,15 +21,13 @@ public class User {
 	private Map<String, Integer> listenedSongs;
 
 	private static Writer writer = new Writer();
-	
+
 	// constructors area
 	public User(String userID, String username) {
 		UserID = userID;
 		Username = username;
 	}
 
-
-	
 	public String getUserID() {
 		return UserID;
 	}
@@ -46,8 +44,6 @@ public class User {
 		Username = username;
 	}
 
-
-
 	public User(String userID, Map<String, Integer> listenedSongs) {
 		UserID = userID;
 		this.listenedSongs = listenedSongs;
@@ -57,53 +53,52 @@ public class User {
 	public Map<String, Integer> getListenedSongs() {
 		return listenedSongs;
 	}
-	
+
 	public void setListenedSongs(Map<String, Integer> listenedSongs) {
 		this.listenedSongs = listenedSongs;
 	}
 
-	
-	public void updateListenedSongsFromEvents(List<UserEvent> userEvents){
+	public void updateListenedSongsFromEvents(List<UserEvent> userEvents) {
 		// update listened songs from user events
 		Map<String, Integer> songsScore = new HashMap<String, Integer>();
 		for (UserEvent userEvent : userEvents) {
 			// if it is current user id
-			if(this.UserID.equals(userEvent.getUserId())){
+			if (this.UserID.equals(userEvent.getUserId())) {
 				songsScore.put(userEvent.getSongId(), userEvent.getRate());
 			}
 		}
 		this.setListenedSongs(songsScore);
 	}
-	
-	public long calculateSimilarity(User other){
+
+	public long calculateSimilarity(User other) {
 		// same function as multiply matrix
 		long score = 0;
 		Map<String, Integer> otherUserMap = other.getListenedSongs();
 		for (String songId : this.listenedSongs.keySet()) {
-			if(otherUserMap.containsKey(songId)){
-				score+= (this.listenedSongs.get(songId)*otherUserMap.get(songId));
+			if (otherUserMap.containsKey(songId)) {
+				score += (this.listenedSongs.get(songId) * otherUserMap.get(songId));
 			}
 		}
 		return score;
 	}
-	
-	public Map<String,Long> listUsersWithSimilarityScore(List<User> users){
+
+	public Map<String, Long> listUsersWithSimilarityScore(List<User> users) {
 		Map<String, Long> list = new HashMap<>();
 		for (User user : users) {
-			if(this.getUserID()!=user.getUserID()){
+			if (this.getUserID() != user.getUserID()) {
 				long userScore = this.calculateSimilarity(user);
 				list.put(user.getUserID(), userScore);
 			}
 		}
 		return list;
 	}
-	
+
 	// 24 hours to millisecond
 	private final long DAY_TO_MILIS = 24 * 3600 * 1000;
 
-	
 	public List<String[]> CreateUserEvent(List<Song> songs, int songPerDay, int daysDuration) {
-		// generate user history (listened from now, in songs list/ how many songs
+		// generate user history (listened from now, in songs list/ how many
+		// songs
 		// per day/ to how many days later?)
 		List<String[]> userEvents = new ArrayList<>();
 		long currentTime = new Date().getTime();
@@ -127,26 +122,69 @@ public class User {
 		}
 		return userEvents;
 	}
-	
+	// must be an user set in parameter
+	public Set<String> getRecommendedSongIds(int numberOfSongs, List<User> sortedByScoreUsers) {
+		Set<String> recommendedSongIds = new HashSet();
+		for (User user : sortedByScoreUsers) {
+			Set<String> exceptSongIds = this.minusExceptSongsIdWithOther(user);
+			for (String string : exceptSongIds) {
+				recommendedSongIds.add(string);
+				numberOfSongs--;
+				// get enough song ids to recommend
+				if (numberOfSongs < 1) {
+					return recommendedSongIds;
+				}
+			}
+		}
+		return recommendedSongIds;
+	}
+
+	// get list of song ids that other user has but this user doesnt have
+	private Set<String> minusExceptSongsIdWithOther(User other) {
+		Set<String> otherUserListenedSong = new HashSet(other.listenedSongs.keySet()); // need
+																						// to
+																						// clone
+		otherUserListenedSong.removeAll(this.listenedSongs.keySet());
+		return otherUserListenedSong;
+
+	}
+
 	public static void writeUserEventsToFile(List<String[]> userEvents, String filePath) {
 		writer.writeArrayValuesToFile(userEvents, filePath);
 	}
 	
-	public static List<User> getUserListWithListenedSongs(List<UserEvent> userEvents){
+	public static List<User> getUserListWithListenedSongs(List<UserEvent> userEvents) {
 		List<User> users = new ArrayList<>();
 		List<String> userIds = new ArrayList<>();
 		for (UserEvent userEvent : userEvents) {
 			userIds.add(userEvent.getUserId());
 		}
 		Set<String> distinctUserIds = new HashSet<String>(userIds);
-		
+
 		for (String id : distinctUserIds) {
-			User u = new User(id,"");
+			User u = new User(id, "");
 			u.updateListenedSongsFromEvents(userEvents);
 			users.add(u);
 		}
 		return users;
 	}
 
-	
+	public static User getUserById(String id, List<UserEvent> userEvents) {
+		List<User> users = User.getUserListWithListenedSongs(userEvents);
+		for (User user : users) {
+			if (user.getUserID().equals(id)) {
+				return user;
+			}
+		}
+		return null;
+	}
+
+	public static List<User> getUserListFromUserIds(Set<String> userIds,List<UserEvent> userEvents){
+		List<User> users = new ArrayList<>();
+		for (String id : userIds) {
+			User u= User.getUserById(id, userEvents);
+			users.add(u);
+		}
+		return users;
+	}
 }

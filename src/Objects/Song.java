@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,7 +114,35 @@ public class Song {
 		}
 		return genres;
 	}
+	public static List<Song> getSongsFromSetOfIds(Set<String> ids, List<Song> allSongs){
+		List<Song> songs = new ArrayList<>();
+		for (String id : ids) {
+			Song s = Song.getSongById(id, allSongs);
+			songs.add(s);
+		}
+		return songs;
+	}
 	
+	// need to fix
+	public static Song getSongById(String id, List<Song> allSongs) {
+		for (Song song : allSongs) {
+			if (song.getSongID().equals(id)) {
+				return song;
+			}
+		}
+		return null;
+	}
+	// processing
+	private static Song quickFindSongById(String id, List<Song> allSongs){
+		
+		for(int i=0;i<allSongs.size();i++){
+			int middleOfList = allSongs.size()/2;
+			if(id.compareTo(allSongs.get(middleOfList).getSongID())>0){
+				
+			}
+		}
+		return null;
+	}
 	private static String[] getAllGenresInString(String genreString){
 		String[] genres = genreString.split("/|,");
 		for(int i=0;i<genres.length;i++){
