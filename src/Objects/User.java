@@ -80,12 +80,12 @@ public class User {
 				difference = this.listenedSongs.get(songId) - otherUserMap.get(songId);
 			}
 			// if other map doesnt contains that song
-			else{
+			else {
 				difference = this.listenedSongs.get(songId);
 			}
-			score += (difference*difference);
+			score += (difference * difference);
 		}
-		double percentage = 1.0/(1+score);
+		double percentage = 1.0 / (1 + score);
 		return percentage;
 	}
 
@@ -129,6 +129,7 @@ public class User {
 		}
 		return userEvents;
 	}
+
 	// must be an user set in parameter
 	public Set<String> getRecommendedSongIds(int numberOfSongs, List<User> sortedByScoreUsers) {
 		Set<String> recommendedSongIds = new HashSet();
@@ -159,7 +160,7 @@ public class User {
 	public static void writeUserEventsToFile(List<String[]> userEvents, String filePath) {
 		writer.writeArrayValuesToFile(userEvents, filePath);
 	}
-	
+
 	public static List<User> getUserListWithListenedSongs(List<UserEvent> userEvents) {
 		List<User> users = new ArrayList<>();
 		List<String> userIds = new ArrayList<>();
@@ -177,19 +178,31 @@ public class User {
 	}
 
 	public static User getUserById(String id, List<UserEvent> userEvents) {
-		List<User> users = User.getUserListWithListenedSongs(userEvents);
-		for (User user : users) {
-			if (user.getUserID().equals(id)) {
-				return user;
-			}
+		int middle = userEvents.size() / 2;
+		// id > middle user's id
+		if (id.compareTo(userEvents.get(middle).getUserId()) > 0) {
+			List<UserEvent> newList = userEvents.subList(middle, userEvents.size());
+			return User.getUserById(id, newList);
 		}
-		return null;
+		// id > middle user's id
+		else if (id.compareTo(userEvents.get(middle).getUserId()) < 0) {
+			List<UserEvent> newList = userEvents.subList(0, middle);
+			return User.getUserById(id, newList);
+		} else {
+
+			List<User> users = User.getUserListWithListenedSongs(userEvents);
+			// 1 user in List
+			if (users.size() > 0)
+				return users.get(0);
+			else
+				return null;
+		}
 	}
 
-	public static List<User> getUserListFromUserIds(Set<String> userIds,List<UserEvent> userEvents){
+	public static List<User> getUserListFromUserIds(Set<String> userIds, List<UserEvent> userEvents) {
 		List<User> users = new ArrayList<>();
 		for (String id : userIds) {
-			User u= User.getUserById(id, userEvents);
+			User u = User.getUserById(id, userEvents);
 			users.add(u);
 		}
 		return users;

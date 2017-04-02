@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,11 +69,13 @@ public class Action {
 		}
 		System.out.println("Got list of users");
 		// create user events and write to file
-
+		List<String[]> allUserEvents = new ArrayList<>();
 		for (User user : users) {
 			List<String[]> currentUserEvents = user.CreateUserEvent(songs, songPerDay, daysDuration);
-			User.writeUserEventsToFile(currentUserEvents, "UserEvent.csv");
+			allUserEvents.addAll(currentUserEvents);
 		}
+		allUserEvents = this.sortAscByFirstElement(allUserEvents);		// sort
+		User.writeUserEventsToFile(allUserEvents, "UserEvent.csv");
 		System.out.println("Finished writing user events to UserEvent.csv");
 	}
 
@@ -101,11 +104,18 @@ public class Action {
 		for (Song song : listenedSongs) {
 			System.out.print(song.getSongString()+"|\t");
 		}
+		
+		// start to recommend and calculate time
 		System.out.println();
+		long startTime = new Date().getTime();
 		System.out.println("Recommend cho ban:");
 		for (Song song : recommendSongs) {
 			System.out.print(song.getSongString()+"|\t");
 		}
+
+		long endTime = new Date().getTime();
+		System.out.println();
+		System.out.println("Thoi gian thuc thi goi y (milisecond):"+((endTime-startTime)));
 		s.close();
 	}
 	
@@ -126,6 +136,25 @@ public class Action {
 			sortedByValue.put(entry.getKey(), entry.getValue());
 		}
 		return sortedByValue;
+	}
+	
+	public List<String[]> sortAscByFirstElement(List<String[]> input) {
+		// sort by values
+		List<String[]> inputList = new LinkedList<>(input);
+		Collections.sort(inputList, new Comparator<String[]>() {
+
+			@Override
+			public int compare(String[] arg0, String[] arg1) {
+				// TODO Auto-generated method stub
+				return arg0[0].compareTo(arg1[0]);
+			}
+
+		});
+		List<String[]> sortedByFirstEle = new LinkedList<>();
+		for (String[] entry : inputList) {
+			sortedByFirstEle.add(entry);
+		}
+		return sortedByFirstEle;
 	}
 
 }

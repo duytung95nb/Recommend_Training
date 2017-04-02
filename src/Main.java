@@ -45,11 +45,8 @@ public class Main {
 			break;
 
 		case 2:
-			long startTime = new Date().getTime();
+			
 			action.recommend();
-			long endTime = new Date().getTime();
-			System.out.println();
-			System.out.println("Thoi gian thuc thi goi y (second):"+((endTime-startTime)/1000));
 			
 			break;
 		case 3:

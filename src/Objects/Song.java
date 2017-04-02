@@ -125,12 +125,26 @@ public class Song {
 	
 	// need to fix
 	public static Song getSongById(String id, List<Song> allSongs) {
-		for (Song song : allSongs) {
-			if (song.getSongID().equals(id)) {
-				return song;
-			}
+		int middle = allSongs.size() / 2;
+		// id > middle user's id
+		int searchingId = Integer.parseInt(id);
+		int middleSongId = Integer.parseInt(allSongs.get(middle).getSongID());
+		
+		if (searchingId > middleSongId) {
+			List<Song> newSongList = allSongs.subList(middle, allSongs.size());
+			return Song.getSongById(id, newSongList);
 		}
-		return null;
+		// id > middle user's id
+		else if (searchingId < middleSongId) {
+			List<Song> newSongList = allSongs.subList(0, middle);
+			return Song.getSongById(id, newSongList);
+		} else {
+			// 1 song in List
+			if (allSongs.size() > 0)
+				return allSongs.get(0);
+			else
+				return null;
+		}
 	}
 	// processing
 	private static Song quickFindSongById(String id, List<Song> allSongs){
