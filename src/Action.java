@@ -74,7 +74,6 @@ public class Action {
 			List<String[]> currentUserEvents = user.CreateUserEvent(songs, songPerDay, daysDuration);
 			allUserEvents.addAll(currentUserEvents);
 		}
-		allUserEvents = this.sortAscByFirstElement(allUserEvents);		// sort
 		User.writeUserEventsToFile(allUserEvents, "UserEvent.csv");
 		System.out.println("Finished writing user events to UserEvent.csv");
 	}

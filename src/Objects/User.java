@@ -119,9 +119,8 @@ public class User {
 				Song chosen = songs.get(randomSong);
 				randomTime = currentTime + (long) (Math.random() * DAY_TO_MILIS);
 				randomDate = new Date(randomTime);
-				rate = (int) (Math.random() * 5);
-				String[] s = new String[] { this.UserID, chosen.getSongID(), chosen.getGenreString(),
-						randomDate.toString(), Integer.toString(rate) };
+				rate = (int) (1+ Math.random() * 5);
+				String[] s = new String[] { this.UserID, chosen.getSongID(), Integer.toString(rate) };
 				userEvents.add(s);
 			}
 			// add 1 day more
