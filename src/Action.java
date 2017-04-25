@@ -56,15 +56,13 @@ public class Action {
 		songPerDay = s.nextInt();
 		System.out.println("Input time duration (day):");
 		daysDuration = s.nextInt();
-		System.out.println("Input user name:");
-		username = s.next();
 		System.out.println("Input number of users:");
 		numberOfUser = s.nextInt();
 
 		// create list of users with username
 		List<User> users = new ArrayList<>();
 		for (int i = 1; i <= numberOfUser; i++) {
-			User u = new User("us" + i, username + i);
+			User u = new User(Integer.toString(i), "randomUser");
 			users.add(u);
 		}
 		System.out.println("Got list of users");
